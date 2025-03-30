@@ -302,5 +302,3 @@ if (window.jQuery.ui && typeof window.jQuery.ui.draggable === 'function') {
       }, 1000);
     }
   }
-
-

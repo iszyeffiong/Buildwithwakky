@@ -304,3 +304,104 @@ if (window.jQuery.ui && typeof window.jQuery.ui.draggable === 'function') {
   }
 
 
+
+  //
+  //
+  //
+// Make the chat toggle button draggable
+if (window.jQuery.ui && typeof window.jQuery.ui.draggable === "function") {
+    window.jQuery(".chat-toggle").draggable({
+      containment: "window", // Keep within the window
+      scroll: false,
+      start: function() {
+        window.jQuery(this).addClass("dragging");
+      },
+      stop: function() {
+        window.jQuery(this).removeClass("dragging");
+        
+        // Save position to localStorage for persistence
+        const position = window.jQuery(this).position();
+        if (window.localStorage) {
+          window.localStorage.setItem("chatIconPosition", JSON.stringify({
+            left: position.left,
+            top: position.top
+          }));
+        }
+      }
+    });
+    
+    // Restore position from localStorage if available
+    if (window.localStorage) {
+      const savedPosition = window.localStorage.getItem("chatIconPosition");
+      if (savedPosition) {
+        try {
+          const position = JSON.parse(savedPosition);
+          window.jQuery(".chat-toggle").css({
+            left: position.left,
+            top: position.top,
+            right: "auto", // Remove the default right positioning
+            bottom: "auto"  // Remove the default bottom positioning
+          });
+        } catch (e) {
+          console.error("Error restoring chat icon position:", e);
+        }
+      }
+    }
+  }
+  
+  // Ensure the chat toggle button still works after being dragged
+  window.jQuery(".chat-toggle").on("click", function(e) {
+    // Only toggle if it wasn't a drag
+    if (!window.jQuery(this).hasClass("ui-draggable-dragging")) {
+      window.jQuery("#chat-widget").toggleClass("open");
+      return false;
+    }
+  });
+  
+  // Update the chat widget position when opened from a dragged chat icon
+  window.jQuery(".chat-toggle").on("click", function() {
+    if (!window.jQuery(this).hasClass("ui-draggable-dragging")) {
+      const iconPos = window.jQuery(this).offset();
+      const windowWidth = window.jQuery(window).width();
+      const windowHeight = window.jQuery(window).height();
+      const chatWidget = window.jQuery("#chat-widget");
+      
+      // Determine which corner to open the chat widget based on icon position
+      if (iconPos.left < windowWidth / 2) {
+        // Icon is on the left side
+        chatWidget.css({
+          left: iconPos.left,
+          right: "auto"
+        });
+      } else {
+        // Icon is on the right side
+        chatWidget.css({
+          right: (windowWidth - iconPos.left - window.jQuery(this).outerWidth()),
+          left: "auto"
+        });
+      }
+      
+      if (iconPos.top < windowHeight / 2) {
+        // Icon is on the top half
+        chatWidget.css({
+          top: iconPos.top + window.jQuery(this).outerHeight() + 10,
+          bottom: "auto"
+        });
+      } else {
+        // Icon is on the bottom half
+        chatWidget.css({
+          bottom: (windowHeight - iconPos.top),
+          top: "auto"
+        });
+      }
+      
+      // Update transform origin for the animation based on position
+      const transformOrigin = 
+        (iconPos.top < windowHeight / 2 ? "top" : "bottom") + " " +
+        (iconPos.left < windowWidth / 2 ? "left" : "right");
+      
+      chatWidget.css({
+        "transform-origin": transformOrigin
+      });
+    }
+  });

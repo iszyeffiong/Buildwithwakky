@@ -1105,3 +1105,32 @@ a, a:hover { text-decoration: none; }
 
 
   
+
+
+  /* Chat Toggle Button */
+.chat-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background-color: var(--main-color);
+    color: var(--white);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: move; /* Change cursor to indicate it's draggable */
+    box-shadow: var(--shadow-black300);
+    z-index: 9998;
+    font-size: 24px;
+    transition: all 0.3s ease;
+    touch-action: none; /* Prevents the browser from handling touch events */
+  }
+  
+  /* Add a class for when the icon is being dragged */
+  .chat-toggle.dragging {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
