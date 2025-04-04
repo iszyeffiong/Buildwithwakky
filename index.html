@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Portfolio Webpage Example</title>
   <link rel="stylesheet" href="./style.css">
-
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body>
 <!-- partial:index.partial.html -->
@@ -815,7 +815,7 @@
 
                 <div class="col-lg-8 col-md-7">
                     <div class="contact-form">
-                        <form action="https://formspree.io/f/YOUR_FORMSPREE_ENDPOINT" method="POST">
+                        <form id="contact-form">
                           <div class="row">
                             <div class="col-lg-6">
                               <div class="form-group">
@@ -852,13 +852,12 @@
                           <div class="row">
                             <div class="col-lg-12">
                               <button type="submit" class="btn-2">Send Message</button>
+                              <div id="form-status" class="mt-3"></div>
                             </div>
                           </div>
-                          
-                          <!-- Optional: Add a hidden field for referring page -->
-                          <input type="hidden" name="_referrer" value="buildwithwakky.com">
                         </form>
                       </div>
+   
                 </div>
             </div>
         </div>

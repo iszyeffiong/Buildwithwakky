@@ -303,7 +303,31 @@ if (window.jQuery.ui && typeof window.jQuery.ui.draggable === 'function') {
     }
   }
 
-  emailjs.init("YPN2w-RdxxjeDg7Kg3");
-
-  // And when sending:
-  emailjs.send('service_v8kglas', 'template_mo0qvdi', formData)
+  <script type="text/javascript">
+  (function() {
+    // Initialize EmailJS with your public key
+    emailjs.init("PN2w-RdxxjeDg7Kg3");
+  })();
+  
+  // Form submission handler - add this to your script.js file or in a script tag
+  window.onload = function() {
+    document.getElementById('contact-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+      // Show sending status
+      document.getElementById('form-status').innerHTML = 'Sending...';
+      
+      // Send the form data using EmailJS
+      emailjs.sendForm('service_v8kglas', 'template_mo0qvdi', this)
+        .then(function() {
+          document.getElementById('form-status').innerHTML = 'Your message has been sent successfully!';
+          document.getElementById('form-status').style.color = 'green';
+          document.getElementById('contact-form').reset();
+        }, function(error) {
+          document.getElementById('form-status').innerHTML = 'Sorry, there was an error sending your message.';
+          document.getElementById('form-status').style.color = 'red';
+          console.log('FAILED...', error);
+        });
+    });
+  }
+</script>
