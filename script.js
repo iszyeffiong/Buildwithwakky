@@ -303,4 +303,7 @@ if (window.jQuery.ui && typeof window.jQuery.ui.draggable === 'function') {
     }
   }
 
+  emailjs.init("YPN2w-RdxxjeDg7Kg3");
 
+  // And when sending:
+  emailjs.send('service_v8kglas', 'template_mo0qvdi', formData)
