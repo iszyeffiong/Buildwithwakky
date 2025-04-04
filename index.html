@@ -948,6 +948,45 @@
         </button>
     </div>
 </div>
+
+<!-- This code should be added to your index.html file just before the closing </body> tag -->
+
+<script type="text/javascript">
+    (function() {
+      emailjs.init("PN2w-RdxxjeDg7Kg3");
+    })();
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('contact-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        // Show sending status
+        document.getElementById('form-status').innerHTML = 'Sending...';
+        document.getElementById('form-status').style.color = '#183153';
+        
+        // Get form data
+        const templateParams = {
+          name: this.name.value,
+          email: this.email.value,
+          phone: this.phone.value,
+          subject: this.subject.value,
+          message: this.message.value
+        };
+        
+        // Send the form data using EmailJS
+        emailjs.send('service_v8kglas', 'template_mo0qvdi', templateParams)
+          .then(function() {
+            document.getElementById('form-status').innerHTML = 'Your message has been sent successfully!';
+            document.getElementById('form-status').style.color = 'green';
+            document.getElementById('contact-form').reset();
+          }, function(error) {
+            console.log('EmailJS error:', error);
+            document.getElementById('form-status').innerHTML = 'Sorry, there was an error sending your message. Please try again or contact us directly at buildwithwakky@gmail.com';
+            document.getElementById('form-status').style.color = 'red';
+          });
+      });
+    });
+  </script>
 </body>
 </html>
 <!-- partial -->
