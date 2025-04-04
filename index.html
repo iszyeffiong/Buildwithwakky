@@ -955,37 +955,116 @@
     (function() {
       emailjs.init("PN2w-RdxxjeDg7Kg3");
     })();
+   // Form submission handler with notification
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('contact-form').addEventListener('submit', function(event) {
+    // Prevent the default form submission which causes URL parameters
+    event.preventDefault();
     
-    document.addEventListener('DOMContentLoaded', function() {
-      document.getElementById('contact-form').addEventListener('submit', function(event) {
-        event.preventDefault();
+    // Show sending status
+    document.getElementById('form-status').innerHTML = 'Sending...';
+    document.getElementById('form-status').style.color = '#183153';
+    
+    // Get form data
+    const templateParams = {
+      name: this.name.value,
+      email: this.email.value,
+      phone: this.phone.value,
+      subject: this.subject.value,
+      message: this.message.value
+    };
+    
+    // Send the form data using EmailJS
+    emailjs.send('service_v8kglas', 'template_mo0qvdi', templateParams)
+      .then(function() {
+        // Reset the form
+        document.getElementById('contact-form').reset();
         
-        // Show sending status
-        document.getElementById('form-status').innerHTML = 'Sending...';
-        document.getElementById('form-status').style.color = '#183153';
+        // Clear the form status
+        document.getElementById('form-status').innerHTML = '';
         
-        // Get form data
-        const templateParams = {
-          name: this.name.value,
-          email: this.email.value,
-          phone: this.phone.value,
-          subject: this.subject.value,
-          message: this.message.value
-        };
-        
-        // Send the form data using EmailJS
-        emailjs.send('service_v8kglas', 'template_mo0qvdi', templateParams)
-          .then(function() {
-            document.getElementById('form-status').innerHTML = 'Your message has been sent successfully!';
-            document.getElementById('form-status').style.color = 'green';
-            document.getElementById('contact-form').reset();
-          }, function(error) {
-            console.log('EmailJS error:', error);
-            document.getElementById('form-status').innerHTML = 'Sorry, there was an error sending your message. Please try again or contact us directly at buildwithwakky@gmail.com';
-            document.getElementById('form-status').style.color = 'red';
-          });
+        // Create and show the notification
+        showNotification('Your message has been sent successfully!');
+      }, function(error) {
+        console.log('EmailJS error:', error);
+        document.getElementById('form-status').innerHTML = 'Sorry, there was an error sending your message.';
+        document.getElementById('form-status').style.color = 'red';
       });
+  });
+  
+  // Create notification function
+  function showNotification(message) {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = 'form-notification';
+    notification.innerHTML = `
+      <div class="notification-content">
+        <span>${message}</span>
+        <button class="notification-close"><i class="fa-solid fa-times"></i></button>
+      </div>
+    `;
+    
+    // Add styles inline to ensure they're applied
+    notification.style.position = 'fixed';
+    notification.style.bottom = '20px';
+    notification.style.left = '20px';
+    notification.style.backgroundColor = 'var(--main-color)';
+    notification.style.color = 'white';
+    notification.style.padding = '15px 20px';
+    notification.style.borderRadius = '5px';
+    notification.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+    notification.style.zIndex = '9999';
+    notification.style.display = 'flex';
+    notification.style.alignItems = 'center';
+    notification.style.maxWidth = '300px';
+    notification.style.transform = 'translateY(100px)';
+    notification.style.opacity = '0';
+    notification.style.transition = 'all 0.3s ease-out';
+    
+    // Add close button styles
+    const closeButton = notification.querySelector('.notification-close');
+    closeButton.style.background = 'none';
+    closeButton.style.border = 'none';
+    closeButton.style.color = 'white';
+    closeButton.style.marginLeft = '10px';
+    closeButton.style.cursor = 'pointer';
+    closeButton.style.fontSize = '14px';
+    
+    // Add to DOM
+    document.body.appendChild(notification);
+    
+    // Trigger animation
+    setTimeout(() => {
+      notification.style.transform = 'translateY(0)';
+      notification.style.opacity = '1';
+    }, 10);
+    
+    // Add click event to close button
+    closeButton.addEventListener('click', function() {
+      notification.style.transform = 'translateY(100px)';
+      notification.style.opacity = '0';
+      
+      // Remove from DOM after animation completes
+      setTimeout(() => {
+        document.body.removeChild(notification);
+      }, 300);
     });
+    
+    // Automatically close after 5 seconds
+    setTimeout(() => {
+      if (document.body.contains(notification)) {
+        notification.style.transform = 'translateY(100px)';
+        notification.style.opacity = '0';
+        
+        setTimeout(() => {
+          if (document.body.contains(notification)) {
+            document.body.removeChild(notification);
+          }
+        }, 300);
+      }
+    }, 5000);
+  }
+});
   </script>
 </body>
 </html>
